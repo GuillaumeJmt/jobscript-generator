@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --job-name={{ job_name }}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={{ cpus }}
+#SBATCH --mem={{ mem }}
+#SBATCH --time={{ time }}
+#SBATCH --partition={{ partition }}
+#SBATCH --output=logs/{{ job_name }}_%j.out
+#SBATCH --error=logs/{{ job_name }}_%j.err
+
+module purge
+module load Gaussian/{{ version }}
+
+mkdir -p logs
+
+SCRATCH=/scratch/$USER/$SLURM_JOB_ID
+mkdir -p $SCRATCH
+export GAUSS_SCRDIR=$SCRATCH
+
+echo "Job started: $(date)"
+echo "Node: $SLURMD_NODENAME"
+echo "CPUs: $SLURM_CPUS_PER_TASK"
+
+g16 < {{ input_file }} > {{ output_file }}
+
+rm -rf $SCRATCH
+echo "Job finished: $(date)"

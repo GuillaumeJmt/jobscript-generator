@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH --job-name={{ job_name }}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task={{ cpus }}
+#SBATCH --mem={{ mem }}
+#SBATCH --time={{ time }}
+#SBATCH --partition={{ partition }}
+#SBATCH --output=logs/{{ job_name }}_%j.out
+#SBATCH --error=logs/{{ job_name }}_%j.err
+
+module purge
+module load Python/{{ version }}
+
+mkdir -p logs
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+export MKL_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+source $HOME/envs/ml/bin/activate
+
+echo "Job started: $(date)"
+echo "Python: $(python3 --version)"
+
+python3 {{ input_file }}
+
+echo "Job finished: $(date)"
