@@ -9,7 +9,9 @@
 #SBATCH --error=logs/mol_%j.err
 
 module purge
-module load Gaussian/16
+module load Gaussian/16-C.02
+# NOTE: the .gjf must contain %nprocshared=16 and a %mem matching --mem,
+# otherwise Gaussian runs on a single core with default memory.
 
 mkdir -p logs
 

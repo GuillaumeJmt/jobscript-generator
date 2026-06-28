@@ -15,7 +15,7 @@ from jinja2 import Environment, FileSystemLoader
 
 DEFAULTS = {
     "nwchem":     {"version": "7.3.0", "partition": "batch", "cpus": "8",  "mem": "32G", "time": "24:00:00"},
-    "gaussian":   {"version": "16",    "partition": "batch", "cpus": "16", "mem": "64G", "time": "48:00:00"},
+    "gaussian":   {"version": "16-C.02", "partition": "batch", "cpus": "16", "mem": "64G", "time": "48:00:00"},
     "python_ml":  {"version": "3.11",  "partition": "batch", "cpus": "4",  "mem": "16G", "time": "12:00:00"},
 }
 
