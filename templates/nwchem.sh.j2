@@ -1,25 +1,24 @@
 #!/bin/bash
 #SBATCH --job-name={{ job_name }}
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task={{ cpus }}
+#SBATCH --ntasks={{ cpus }}
+#SBATCH --cpus-per-task=1
 #SBATCH --mem={{ mem }}
 #SBATCH --time={{ time }}
 #SBATCH --partition={{ partition }}
 #SBATCH --output=logs/{{ job_name }}_%j.out
 #SBATCH --error=logs/{{ job_name }}_%j.err
 
+# NWChem parallelism is MPI (Global Arrays / ARMCI), not OpenMP.
+# Scale by increasing --ntasks; launch with srun.
+
 module purge
 module load NWChem/{{ version }}
-
-export NWCHEM_BASIS_LIBRARY=$NWCHEM_BASIS_LIBRARY
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-
 mkdir -p logs
 
 echo "Job started: $(date)"
 echo "Node: $SLURMD_NODENAME"
-echo "CPUs: $SLURM_CPUS_PER_TASK"
+echo "MPI ranks: $SLURM_NTASKS"
 
-nwchem {{ input_file }} > {{ output_file }}
+srun nwchem {{ input_file }} > {{ output_file }}
 
 echo "Job finished: $(date)"
